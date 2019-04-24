@@ -1,0 +1,5 @@
+Keras==2.2.4
+numpy==1.15.0
+scipy==1.2.1
+Pillow==5.4.1
+matplotlib==3.0.3
