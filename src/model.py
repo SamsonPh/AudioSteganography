@@ -3,23 +3,38 @@ from keras.models import Model
 
 
 def BaseModel(input_tensor):
-    x3 = Conv2D(50, activation='relu', kernel_size=3, padding="same")(input_tensor)
-    x3 = Conv2D(50, activation='relu', kernel_size=3, padding="same")(x3)
-    x3 = Conv2D(50, activation='relu', kernel_size=3, padding="same")(x3)
-    x3 = Conv2D(50, activation='relu', kernel_size=3, padding="same")(x3)
-    x3 = Conv2D(50, activation='relu', kernel_size=3, padding="same")(x3)
+    x3 = Conv2D(50, activation='relu',
+                kernel_size=3, padding="same")(input_tensor)
+    x3 = Conv2D(50, activation='relu',
+                kernel_size=3, padding="same")(x3)
+    x3 = Conv2D(50, activation='relu',
+                kernel_size=3, padding="same")(x3)
+    x3 = Conv2D(50, activation='relu',
+                kernel_size=3, padding="same")(x3)
+    x3 = Conv2D(50, activation='relu',
+                kernel_size=3, padding="same")(x3)
 
-    x4 = Conv2D(50, activation='relu', kernel_size=4, padding="same")(input_tensor)
-    x4 = Conv2D(50, activation='relu', kernel_size=4, padding="same")(x4)
-    x4 = Conv2D(50, activation='relu', kernel_size=4, padding="same")(x4)
-    x4 = Conv2D(50, activation='relu', kernel_size=4, padding="same")(x4)
-    x4 = Conv2D(50, activation='relu', kernel_size=4, padding="same")(x4)
+    x4 = Conv2D(50, activation='relu',
+                kernel_size=4, padding="same")(input_tensor)
+    x4 = Conv2D(50, activation='relu',
+                kernel_size=4, padding="same")(x4)
+    x4 = Conv2D(50, activation='relu',
+                kernel_size=4, padding="same")(x4)
+    x4 = Conv2D(50, activation='relu',
+                kernel_size=4, padding="same")(x4)
+    x4 = Conv2D(50, activation='relu',
+                kernel_size=4, padding="same")(x4)
 
-    x5 = Conv2D(50, activation='relu', kernel_size=5, padding="same")(input_tensor)
-    x5 = Conv2D(50, activation='relu', kernel_size=5, padding="same")(x5)
-    x5 = Conv2D(50, activation='relu', kernel_size=5, padding="same")(x5)
-    x5 = Conv2D(50, activation='relu', kernel_size=5, padding="same")(x5)
-    x5 = Conv2D(50, activation='relu', kernel_size=5, padding="same")(x5)
+    x5 = Conv2D(50, activation='relu',
+                kernel_size=5, padding="same")(input_tensor)
+    x5 = Conv2D(50, activation='relu',
+                kernel_size=5, padding="same")(x5)
+    x5 = Conv2D(50, activation='relu',
+                kernel_size=5, padding="same")(x5)
+    x5 = Conv2D(50, activation='relu',
+                kernel_size=5, padding="same")(x5)
+    x5 = Conv2D(50, activation='relu',
+                kernel_size=5, padding="same")(x5)
 
     x = Concatenate(axis=3)([x3, x4, x5])
 
@@ -34,19 +49,25 @@ def Decode_Image_Model(channels):
     concat_input = Concatenate(axis=3)([encoded_audio, input_image])
 
     decoded_image = BaseModel(concat_input)
-    decoded_image = Conv2D(3, activation='relu', kernel_size=1, padding="same", name="decode_image")(decoded_image)
+    decoded_image = Conv2D(3, activation='relu',
+                           kernel_size=1, padding="same",
+                           name="decode_image")(decoded_image)
 
-    return Model(inputs=[input_audio, input_image], outputs=[decoded_image], name='decode_image_model')
+    return Model(inputs=[input_audio, input_image],
+                 outputs=[decoded_image], name='decode_image_model')
 
 
 def Decode_Audio_Model(channels):
     decoded_image = Input(shape=(255, 255, 3))
 
     decoded_audio = BaseModel(decoded_image)
-    decoded_audio = Conv2D(channels, activation='linear', kernel_size=1, padding="same", name="decode_audio")(
-        decoded_audio)
+    decoded_audio = Conv2D(channels, activation='linear',
+                           kernel_size=1, padding="same",
+                           name="decode_audio")(decoded_audio)
 
-    return Model(input=decoded_image, output=decoded_audio, name='decode_audio_model')
+    return Model(input=decoded_image,
+                 output=decoded_audio,
+                 name='decode_audio_model')
 
 
 def Encode_Decoder_Model(preprocess="dft"):
@@ -64,7 +85,8 @@ def Encode_Decoder_Model(preprocess="dft"):
     decode_image = decode_image_model([input_audio, input_image])
     decode_audio = decode_audio_model(decode_image)
 
-    return Model(inputs=[input_audio, input_image], outputs=[decode_audio, decode_image])
+    return Model(inputs=[input_audio, input_image],
+                 outputs=[decode_audio, decode_image])
 
 
 # encode_decoder_model = Encode_Decoder_Model("raw")

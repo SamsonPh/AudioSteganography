@@ -12,7 +12,8 @@ from keras.layers import Input
 def load_audio_dft(path_audio_file, max_feature=64516):
     sr, s1 = read(path_audio_file)
     if len(s1) < max_feature:
-        s1 = np.pad(s1, (0, max_feature - len(s1)), mode='constant', constant_values=0)
+        s1 = np.pad(s1, (0, max_feature - len(s1)),
+                    mode='constant', constant_values=0)
     else:
         s1 = s1[:max_feature]
     s1 = s1 / (2 ** 10)
@@ -28,14 +29,17 @@ def load_audio_dft(path_audio_file, max_feature=64516):
 def load_audio_raw(path_audio_file, max_feature=195075):
     sr, s1 = read(path_audio_file)
     if len(s1) < max_feature:
-        s1 = np.pad(s1, (0, max_feature - len(s1)), mode='constant', constant_values=0)
+        s1 = np.pad(s1, (0, max_feature - len(s1)),
+                    mode='constant', constant_values=0)
     else:
         s1 = s1[:max_feature]
     s1 = np.reshape(s1, (255, 255, 3))
     return s1 / 2 ** 10
 
 
-def image_generator(path_image_dir, path_audio_dir, batch_size=8, size=(255, 255), preprocess='raw'):
+def image_generator(path_image_dir, path_audio_dir,
+                    batch_size=8, size=(255, 255),
+                    preprocess='raw'):
     list_image_train = os.listdir(path_image_dir)
     list_audio_train = os.listdir(path_audio_dir)
     while True:
@@ -44,12 +48,15 @@ def image_generator(path_image_dir, path_audio_dir, batch_size=8, size=(255, 255
         batch_audio = []
 
         for i in range(batch_size):
-            img_path = os.path.join(path_image_dir, random.choice(list_image_train))
-            audio_path = os.path.join(path_audio_dir, random.choice(list_audio_train))
+            img_path = os.path.join(path_image_dir,
+                                    random.choice(list_image_train))
+            audio_path = os.path.join(path_audio_dir,
+                                      random.choice(list_audio_train))
 
             image = Image.open(img_path).convert("RGB")
 
-            image = np.array(ImageOps.fit(image, size), dtype=np.float32) / 255.
+            image = np.array(ImageOps.fit(image, size),
+                             dtype=np.float32) / 255.
 
             if preprocess == 'raw':
                 audio = np.array(load_audio_raw(audio_path), dtype=np.float32)
@@ -62,8 +69,10 @@ def image_generator(path_image_dir, path_audio_dir, batch_size=8, size=(255, 255
             else:
                 print("Mode Wrong!!!!")
 
-        yield ({'input_image': np.array(batch_image), 'input_audio': np.array(batch_audio)},
-               {'decode_image_model': np.array(batch_image), 'decode_audio_model': np.array(batch_audio)})
+        yield ({'input_image': np.array(batch_image),
+                'input_audio': np.array(batch_audio)},
+               {'decode_image_model': np.array(batch_image),
+                'decode_audio_model': np.array(batch_audio)})
 
 
 def split_model(path_model='../models/model_dft1.0_1.0.hdf5'):

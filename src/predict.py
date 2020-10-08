@@ -24,7 +24,9 @@ def decode_image_dft(args):
     audio = np.expand_dims(audio, axis=0)
 
     decode_image_model = load_model(path_model)
-    image_decode = decode_image_model.predict({'input_image': image, 'input_audio': audio})
+    image_decode = decode_image_model.predict(
+                                {'input_image': image,
+                                    'input_audio': audio})
 
     image_decode = (np.squeeze(image_decode) * 255).astype("int")
 
@@ -45,7 +47,8 @@ def decode_audio_dft(args):
     audio *= (2 ** 10)
     audio = audio[:, :, 0] + audio[:, :, 1] * 1j
 
-    t, x = istft(np.abs(audio) * np.exp(1j * np.angle(audio)), fs=16000, nfft=254 * 2, nperseg=254 * 2, noverlap=254)
+    t, x = istft(np.abs(audio) * np.exp(1j * np.angle(audio)),
+                 fs=16000, nfft=254 * 2, nperseg=254 * 2, noverlap=254)
     x = x.astype(np.int16)
 
     write("../outputs/audio_decode.wav", 16000, x)
@@ -67,7 +70,9 @@ def decode_image_raw(args):
     audio = np.expand_dims(audio, axis=0)
 
     decode_image_model = load_model(path_model)
-    image_decode = decode_image_model.predict({'input_image': image, 'input_audio': audio})
+    image_decode = decode_image_model.predict(
+                                {'input_image': image,
+                                    'input_audio': audio})
 
     image_decode = (np.squeeze(image_decode) * 255).astype("int")
 
@@ -97,10 +102,14 @@ def decode_audio_raw(args):
 def parse_arguments(argv):
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--mode', type=str, help='model using: e for encoding, d for decoding(d)', choices=["e", "d"])
-    parser.add_argument('--preprocess', type=str, help='preprocess: raw/dft, default:dft',
+    parser.add_argument('--mode', type=str,
+                        help='model using: e for encoding, d for decoding(d)',
+                        choices=["e", "d"])
+    parser.add_argument('--preprocess', type=str,
+                        help='preprocess: raw/dft, default:dft',
                         default="dft", choices=["dft", "raw"])
-    parser.add_argument('--path_model', type=str, help='path to model pre-trained')
+    parser.add_argument('--path_model', type=str,
+                        help='path to model pre-trained')
     parser.add_argument('--img_path', type=str, help='path to image')
     parser.add_argument('--audio_path', type=str, help='path to audio')
     return parser.parse_args(argv)
