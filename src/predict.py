@@ -44,11 +44,12 @@ def decode_audio_dft(args):
 
     audio = np.squeeze(decode_model.predict(np.expand_dims(test, axis=0)))
 
-    audio *= (2 ** 10)
+    # audio *= (2 ** 10)
     audio = audio[:, :, 0] + audio[:, :, 1] * 1j
 
     t, x = istft(np.abs(audio) * np.exp(1j * np.angle(audio)),
                  fs=16000, nfft=254 * 2, nperseg=254 * 2, noverlap=254)
+    x *= (2 ** 10)
     x = x.astype(np.int16)
 
     write("../outputs/audio_decode.wav", 16000, x)
@@ -90,8 +91,9 @@ def decode_audio_raw(args):
 
     audio = np.squeeze(decode_model.predict(np.expand_dims(test, axis=0)))
 
-    audio *= (2 ** 10)
+    # audio *= (2 ** 10)
     audio = np.reshape(audio, 255 ** 2 * 3)
+    audio *= (2 ** 10)
     audio = audio.astype(np.int16)
 
     write("../outputs/audio_decode.wav", 16000, audio)

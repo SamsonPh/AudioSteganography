@@ -37,9 +37,9 @@ def train(args):
     valid_generator = image_generator(PATH_IMAGE_VAL, PATH_AUDIO_VAL,
                                       mode=preprocess)
     encode_decoder_model.fit_generator(train_generator,
-                                       steps_per_epoch=500, epochs=100,
+                                       steps_per_epoch=1000, epochs=100,
                                        validation_data=valid_generator,
-                                       validation_steps=200,
+                                       validation_steps=500,
                                        callbacks=[check_point, early_stop])
 
 
