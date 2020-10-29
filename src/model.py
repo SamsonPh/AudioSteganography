@@ -88,6 +88,3 @@ def Encode_Decoder_Model(preprocess="dft"):
     return Model(inputs=[input_audio, input_image],
                  outputs=[decode_audio, decode_image])
 
-
-# encode_decoder_model = Encode_Decoder_Model("raw")
-# encode_decoder_model.summary()
